@@ -10,10 +10,7 @@ dotenv.config({ path: "./src/.env" });
 const app = express();
 const port = process.env.PORT || 3001;
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://duythai03.github.io/free-movie/",
-];
+const allowedOrigins = ["http://localhost:3000"];
 
 app.use(
   cors({
