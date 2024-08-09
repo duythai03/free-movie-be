@@ -10,14 +10,7 @@ dotenv.config({ path: "./src/.env" });
 const app = express();
 const port = process.env.PORT || 3001;
 
-const allowedOrigins = ["http://localhost:3000"];
-
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(cookieParser());
