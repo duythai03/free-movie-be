@@ -18,4 +18,8 @@ router.get(
 );
 router.post("/refresh-token", userController.refreshToken);
 
+router.get("/hello", (req, res) => {
+  res.json({ message: "Hello World" });
+});
+
 module.exports = router;
