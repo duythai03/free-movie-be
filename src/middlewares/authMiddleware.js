@@ -3,14 +3,15 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "../../.env" });
 
 const authMiddleware = (req, res, next) => {
-  if (!req.headers.token) {
+  const token = req.headers.token;
+  if (!token) {
     return res.status(401).json({
       status: "ERR",
       message: "User has not logged in",
     });
   } else {
-    const token = req.headers.token.split(" ")[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
+    const parsedToken = token.split(" ")[1];
+    jwt.verify(parsedToken, process.env.ACCESS_TOKEN, function (err, user) {
       if (err) {
         return res.status(401).json({
           status: "ERR",
@@ -20,16 +21,32 @@ const authMiddleware = (req, res, next) => {
         req.user = user; // Gắn thông tin user vào req.user
         next();
       }
-      console.log("user", user);
-      console.log("req.user", req.user);
     });
   }
 };
 
 const authUserMiddleware = (req, res, next) => {
-  const token = req.headers.token.split(" ")[1];
+  const token = req.headers.token;
+
+  if (!token) {
+    return res.status(401).json({
+      status: "ERR",
+      message: "User has not logged in",
+    });
+  }
+
+  // Kiểm tra token có dạng đúng (ví dụ: "Bearer <token>")
+  if (!token.includes(" ")) {
+    return res.status(401).json({
+      status: "ERR",
+      message: "Invalid token format",
+    });
+  }
+
+  const parsedToken = token.split(" ")[1];
   const userId = req.params.id;
-  jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
+
+  jwt.verify(parsedToken, process.env.ACCESS_TOKEN, function (err, user) {
     if (err) {
       return res.status(401).json({
         status: "ERR",
@@ -45,7 +62,6 @@ const authUserMiddleware = (req, res, next) => {
         message: "Unauthorized",
       });
     }
-    console.log("user", user); // Bạn có thể bỏ console.log sau khi kiểm tra
   });
 };
 
