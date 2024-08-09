@@ -12,7 +12,7 @@ const port = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["https://duythai03.github.io", "http://localhost:3000"],
     credentials: true,
   })
 );
