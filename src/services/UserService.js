@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const { generalAccessToken, generalRefreshToken } = require("./JwtService");
 
 const createUser = (newUser) => {
@@ -13,7 +13,7 @@ const createUser = (newUser) => {
           message: "Email đã tồn tại",
         });
       }
-      const hash = bcrypt.hashSync(password, 10);
+      const hash = bcryptjs.hashSync(password, 10);
       const createdUser = await User.create({
         name,
         email,
@@ -43,7 +43,10 @@ const loginUser = (userLogin) => {
           message: "Tài khoản không xác định",
         });
       }
-      const comparedPassword = bcrypt.compareSync(password, checkUser.password);
+      const comparedPassword = bcryptjs.compareSync(
+        password,
+        checkUser.password
+      );
       console.log("comparedPassword", comparedPassword);
       if (!comparedPassword) {
         resolve({
