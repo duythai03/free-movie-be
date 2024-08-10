@@ -25,12 +25,11 @@ const addMovieHistory = async (req, res) => {
 const getAllMovies = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { limit, page, sort } = req.query;
+    const { limit, page } = req.query;
     const result = await MovieHistoryService.getAllMovies(
       userId,
       limit || 10,
-      page || 1,
-      sort
+      page || 1
     );
     return res.status(200).json(result);
   } catch (err) {
