@@ -33,44 +33,25 @@ const addMovieHistory = (newMovieHistory, userId) => {
   });
 };
 
-const getAllMovies = (userId, limit, page, sort) => {
+const getAllMovies = (userId, limit, page) => {
   return new Promise(async (resolve, reject) => {
     page = page - 1;
     try {
       const totalMovies = await MovieHistory.countDocuments({ user: userId });
-      if (sort && sort.length === 2) {
-        console.log("Sort condition met");
-        const objectSort = {};
-        objectSort[sort[0]] = sort[1];
-        const allMoviesSort = await MovieHistory.find({ user: userId })
-          .limit(limit)
-          .skip(limit * page)
-          .sort(objectSort);
-        resolve({
-          status: "OK",
-          message: "success",
-          data: allMoviesSort,
-          totalMoviessEachPage: limit,
-          currentPage: page + 1,
-          sort: objectSort,
-          totalMovies: totalMovies,
-          totalPage: Math.ceil(totalMovies / limit),
-        });
-      } else {
-        console.log("else condition met");
-        const allMovies = await MovieHistory.find({ user: userId })
-          .limit(limit)
-          .skip(limit * page);
-        resolve({
-          status: "OK",
-          message: "success",
-          data: allMovies,
-          totalMoviesEachPage: limit,
-          currentPage: page + 1,
-          totalMovies: totalMovies,
-          totalPage: Math.ceil(totalMovies / limit),
-        });
-      }
+      console.log("else condition met");
+      const allMovies = await MovieHistory.find({ user: userId })
+        .limit(limit)
+        .skip(limit * page)
+        .sort({ createdAt: -1 });
+      resolve({
+        status: "OK",
+        message: "success",
+        data: allMovies,
+        totalMoviesEachPage: limit,
+        currentPage: page + 1,
+        totalMovies: totalMovies,
+        totalPage: Math.ceil(totalMovies / limit),
+      });
     } catch (err) {
       reject(err);
     }
