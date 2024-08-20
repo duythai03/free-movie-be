@@ -52,7 +52,7 @@ const loginUser = async (req, res) => {
     res.cookie("refresh_token", refresh_token, {
       httpOnly: true,
       samesite: "none",
-      // secure: true,
+      secure: true,
     });
     return res.status(200).json(newResult);
   } catch (err) {
