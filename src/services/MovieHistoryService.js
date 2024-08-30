@@ -8,19 +8,31 @@ const addMovieHistory = (newMovieHistory, userId) => {
         slug: slug,
         user: userId,
       });
+
       if (checkMovie !== null) {
+        // Cập nhật trường updatedAt nếu phim đã có trong lịch sử
+        checkMovie.updatedAt = new Date();
+        await checkMovie.save();
+
         resolve({
-          status: "ERR",
-          message: "Phim đã lưu vào lịch sử xem của bạn",
+          status: "OK",
+          message: "Cập nhật thời gian xem phim thành công",
+          data: checkMovie,
         });
       } else {
-        const createdMovie = await MovieHistory.create({
+        const movieData = {
           name,
           slug,
           poster_url,
-          thumb_url,
           user: userId,
-        });
+        };
+
+        // Chỉ thêm thumb_url nếu nó tồn tại
+        if (thumb_url) {
+          movieData.thumb_url = thumb_url;
+        }
+
+        const createdMovie = await MovieHistory.create(movieData);
         resolve({
           status: "OK",
           message: "Đã tự động thêm vào lịch sử",
@@ -42,7 +54,7 @@ const getAllMovies = (userId, limit, page) => {
       const allMovies = await MovieHistory.find({ user: userId })
         .limit(limit)
         .skip(limit * page)
-        .sort({ createdAt: -1 });
+        .sort({ updatedAt: -1 });
       resolve({
         status: "OK",
         message: "success",
