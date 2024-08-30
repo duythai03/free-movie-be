@@ -9,7 +9,7 @@ const addMovieHistory = async (req, res) => {
     if (!name || !slug || !poster_url) {
       return res.status(400).json({
         status: "ERR",
-        message: "Tất cả các trường đều bắt buộc",
+        message: "Tất cả các trường đều bắt buộc!",
       });
     }
     const result = await MovieHistoryService.addMovieHistory(req.body, userId);
