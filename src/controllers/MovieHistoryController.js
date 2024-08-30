@@ -12,7 +12,17 @@ const addMovieHistory = async (req, res) => {
         message: "Tất cả các trường đều bắt buộc!",
       });
     }
-    const result = await MovieHistoryService.addMovieHistory(req.body, userId);
+
+    const movieData = {
+      name,
+      slug,
+      poster_url,
+    };
+    if (thumb_url) {
+      movieData.thumb_url = thumb_url;
+    }
+
+    const result = await MovieHistoryService.addMovieHistory(movieData, userId);
     return res.status(201).json(result);
   } catch (err) {
     return res.status(500).json({
