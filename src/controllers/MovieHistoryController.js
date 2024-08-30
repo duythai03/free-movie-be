@@ -6,7 +6,7 @@ const addMovieHistory = async (req, res) => {
     const userId = req.user.id;
     console.log("userId", userId);
 
-    if (!name || !slug || !poster_url || !thumb_url) {
+    if (!name || !slug || !poster_url) {
       return res.status(400).json({
         status: "ERR",
         message: "Tất cả các trường đều bắt buộc",
