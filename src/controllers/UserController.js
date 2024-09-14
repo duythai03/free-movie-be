@@ -53,6 +53,7 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       samesite: "none",
       secure: true,
+      maxAge: 15552000,
     });
     return res.status(200).json(newResult);
   } catch (err) {
